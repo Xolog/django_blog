@@ -29,8 +29,11 @@ class Post(models.Model):
                               choices=Status.choices,
                               default=Status.DRAFT)
 
+    media = models.FileField
+
     objects = models.Manager()
     published = PublishedManager()
+
 
     class Meta:
         ordering = ['-publish']
