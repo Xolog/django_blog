@@ -30,12 +30,21 @@ class PostListView(ListView):
 
 
 def post_detail(request, year, month, day, post):
-    return render(request, 'blog/post/detail.html', {'post': get_object_or_404(Post,
-                                                                               slug=post,
-                                                                               publish__year=year,
-                                                                               publish__month=month,
-                                                                               publish__day=day,
-                                                                               status=Post.Status.PUBLISHED)})
+    post = get_object_or_404(Post,
+                             slug=post,
+                             publish__year=year,
+                             publish__month=month,
+                             publish__day=day,
+                             status=Post.Status.PUBLISHED)
+
+    comments = post.comments.filter(active=True)
+    form = CommentForm()
+
+    return render(request, 'blog/post/detail.html', context={
+        'post': post,
+        'comments': comments,
+        'form': form
+    })
 
 
 def post_share(request, post_id):
